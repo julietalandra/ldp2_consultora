@@ -9,6 +9,9 @@ try {
     die("<p style='color:red;'>Error de conexión: " . $e->getMessage() . "</p>");
 }
 
+// Limpieza de usuarios de prueba previos para coincidir exactamente con la maqueta
+mysqli_query($conn, "DELETE FROM usuarios WHERE Usuario = 'jlandra'");
+
 // 1. Crear tablas si no existen
 $queries = [];
 
@@ -96,16 +99,6 @@ $usuariosSeed = [
         'Activo' => 1
     ],
     [
-        'Nombre' => 'Julieta',
-        'Apellido' => 'Landra',
-        'Email' => 'jlandra@consultora.com',
-        'Usuario' => 'jlandra',
-        'Clave' => $claveComun,
-        'IdRol' => 1, // Administrador
-        'Foto' => 'user.png',
-        'Activo' => 1
-    ],
-    [
         'Nombre' => 'Marcos',
         'Apellido' => 'Gutierrez',
         'Email' => 'mgutierrez@consultora.com',
@@ -136,7 +129,7 @@ $usuariosSeed = [
         'Activo' => 1
     ],
     [
-        'Nombre' => 'Carlos',
+        'Nombre' => 'Carla',
         'Apellido' => 'Sanabria',
         'Email' => 'csanabria@consultora.com',
         'Usuario' => 'csanabria',
@@ -310,7 +303,6 @@ if ($projCount == 0) {
 echo "<h3>¡Proceso de sembrado finalizado correctamente!</h3>";
 echo "<p>Puedes entrar al <a href='login.php'>Login del Panel</a> con cualquiera de estas credenciales:</p>";
 echo "<ul>
-    <li><strong>Administrador (¡Tú!):</strong> <code>jlandra</code> / Contraseña: <code>clave123</code></li>
     <li><strong>Administrador:</strong> <code>spalacios</code> / Contraseña: <code>clave123</code></li>
     <li><strong>Líder (Tiene acceso):</strong> <code>mgutierrez</code> / Contraseña: <code>clave123</code></li>
     <li><strong>Líder (Tiene acceso):</strong> <code>wjhonson</code> / Contraseña: <code>clave123</code></li>

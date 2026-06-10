@@ -26,6 +26,7 @@ $CantidadUsuarios = count($ListadoUsuarios);
                     
                     <div class="card-header">
                         <h4 class="text-info">Visualizando <?php echo $CantidadUsuarios; ?> registros</h4>
+                        <hr />
                     </div>
 
                     <table class="table table-hover my-0">

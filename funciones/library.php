@@ -143,7 +143,7 @@ function Listar_Proyectos($vConexion) {
 function Validar_Proyecto() {
     $_SESSION['Mensaje'] = '';
 
-    if (strlen(trim($_POST['Denominacion'])) < 3) {
+    if (strlen($_POST['Denominacion']) < 3) {
         $_SESSION['Mensaje'] .= 'Ingresá un nombre de proyecto con al menos 3 caracteres.<br/>';
     }
     if (empty($_POST['IdEmpresa'])) {

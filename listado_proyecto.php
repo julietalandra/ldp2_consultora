@@ -25,6 +25,7 @@ $CantidadProyectos = count($ListadoProyectos);
                 <div class="card flex-fill">
                     <div class="card-header">
                         <h4 class="text-info">Visualizando <?php echo $CantidadProyectos; ?> registros</h4>
+                        <hr />
                     </div>
 
                     <table class="table table-hover my-0">
@@ -61,19 +62,14 @@ $CantidadProyectos = count($ListadoProyectos);
                                         $colorBadge = 'secondary';
                                 }
 
-                                // Determinar la bandera de país basándonos en el nombre del país
-                                $paisNombre = strtoupper($ListadoProyectos[$i]['PAIS']);
-                                if (strpos($paisNombre, 'ARG') !== false) {
-                                    $bandera = 'ARG.jpg';
-                                } elseif (strpos($paisNombre, 'URU') !== false) {
-                                    $bandera = 'URU.jpg';
-                                } elseif (strpos($paisNombre, 'CHI') !== false) {
-                                    $bandera = 'CHI.jpg';
-                                } elseif (strpos($paisNombre, 'BRA') !== false || strpos($paisNombre, 'BR') !== false) {
-                                    $bandera = 'BRA.jpg';
-                                } else {
-                                    $bandera = 'default.jpg';
-                                }
+                                // Mapeo dinámico de país → bandera
+                                $banderas = [
+                                    'Argentina' => 'ARG.jpg',
+                                    'Uruguay'   => 'URU.jpg',
+                                    'Chile'     => 'CHI.jpg',
+                                    'Brasil'    => 'BRA.jpg',
+                                ];
+                                $bandera = $banderas[$ListadoProyectos[$i]['PAIS']] ?? 'ARG.jpg';
 
                                 // ID encriptado en base64 para las acciones
                                 $idEncriptado = base64_encode($ListadoProyectos[$i]['ID']);
@@ -101,8 +97,8 @@ $CantidadProyectos = count($ListadoProyectos);
                                             <span data-feather="edit"></span> Editar
                                         </a>
 
-                                        <!-- Cancelar: Solo visible si el usuario es Administrador (Nivel 1) -->
-                                        <?php if ($_SESSION['Usuario_Nivel'] == 1): ?>
+                                        <!-- Cancelar: Visible para Admin (Nivel 1) y Líder (Nivel 2) -->
+                                        <?php if (in_array($_SESSION['Usuario_Nivel'], [1, 2])): ?>
                                             <a class="btn btn-warning btn-sm" href="cancelar_proyecto.php?ID_PROYECTO=<?php echo $idEncriptado; ?>&ESTADO=4">
                                                 <span data-feather="alert-triangle"></span> Cancelar
                                             </a>
