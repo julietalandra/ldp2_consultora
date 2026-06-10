@@ -9,8 +9,26 @@ try {
     die("<p style='color:red;'>Error de conexión: " . $e->getMessage() . "</p>");
 }
 
-// Limpieza de usuarios de prueba previos para coincidir exactamente con la maqueta
-mysqli_query($conn, "DELETE FROM usuarios WHERE Usuario = 'jlandra'");
+// Limpieza de usuarios de prueba previos para coincidir exactamente con la maqueta,
+// transfiriendo primero cualquier registro creado por 'jlandra' al administrador principal ('spalacios').
+$resJuli = mysqli_query($conn, "SELECT Id FROM usuarios WHERE Usuario = 'jlandra'");
+if ($resJuli && mysqli_num_rows($resJuli) > 0) {
+    $rowJuli = mysqli_fetch_array($resJuli);
+    $juliId = $rowJuli['Id'];
+    
+    $resAdmin = mysqli_query($conn, "SELECT Id FROM usuarios WHERE Usuario = 'spalacios' LIMIT 1");
+    $adminId = 1;
+    if ($resAdmin && mysqli_num_rows($resAdmin) > 0) {
+        $rowAdmin = mysqli_fetch_array($resAdmin);
+        $adminId = $rowAdmin['Id'];
+    }
+    
+    mysqli_query($conn, "SET FOREIGN_KEY_CHECKS = 0;");
+    mysqli_query($conn, "UPDATE proyectos SET IdUsuarioCarga = $adminId WHERE IdUsuarioCarga = $juliId");
+    mysqli_query($conn, "UPDATE empresas SET IdUsuarioCarga = $adminId WHERE IdUsuarioCarga = $juliId");
+    mysqli_query($conn, "DELETE FROM usuarios WHERE Id = $juliId");
+    mysqli_query($conn, "SET FOREIGN_KEY_CHECKS = 1;");
+}
 
 // 1. Crear tablas si no existen
 $queries = [];
