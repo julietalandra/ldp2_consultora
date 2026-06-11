@@ -1,25 +1,30 @@
 <?php
 session_start();
 require_once 'funciones/library.php';
+
 $MiConexion = ConexionBD();
 
 $Mensaje = '';
+
 
 if (!empty($_POST['BotonLogin'])) {
     // Limpieza de datos básica
     $usuario = trim(strip_tags($_POST['email']));
     $clave   = trim(strip_tags($_POST['password']));
 
+    // Validar que los campos no estén vacíos
     if (empty($usuario) || empty($clave)) {
         $Mensaje = 'Por favor, completa todos los campos.';
     } else {
+        // Consultar a la base de datos si las credenciales son válidas (verifica hash de clave)
         $UsuarioLogueado = DatosLogin_Hash($usuario, $clave, $MiConexion);
 
         if (!empty($UsuarioLogueado)) {
-            // Niveles que pueden ingresar: 1=Administrador, 2=Lider
+            // Definir niveles de acceso permitidos: 1 = Administrador, 2 = Líder
             $NivelesPermitidos = [1, 2];
             $PermiteIngresar = in_array($UsuarioLogueado['NIVEL_ID'], $NivelesPermitidos);
 
+            // Validar permisos y si la cuenta está activa
             if (!$PermiteIngresar) {
                 $Mensaje = 'No tienes permisos asignados para ingresar al panel';
             } elseif ($UsuarioLogueado['Activo'] != 1) {
@@ -82,6 +87,7 @@ if (!empty($_POST['BotonLogin'])) {
                                     </div>
                                     
                                     <div class="card-header text-center pb-0">
+                                        <!-- Mostrar mensaje de error si existió alguna falla en el login -->
                                         <?php if (!empty($Mensaje)): ?>
                                             <h4 class="text-danger"><?php echo $Mensaje; ?></h4>
                                         <?php endif; ?>
@@ -90,9 +96,10 @@ if (!empty($_POST['BotonLogin'])) {
                                     <form action="" method="POST">
                                         <div class="mb-3">
                                             <label class="form-label">Login</label>
+                                            <!-- Mantiene el valor del email/usuario ingresado tras un intento fallido -->
                                             <input class="form-control form-control-lg" type="text" name="email" 
                                                    placeholder="Ingresa tu email o usuario" 
-                                                   value="<?php echo isset($_POST['email']) ? htmlspecialchars($_POST['email']) : ''; ?>" required />
+                                                   value="<?php echo isset($_POST['email']) ? $_POST['email'] : ''; ?>" required />
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Password</label>

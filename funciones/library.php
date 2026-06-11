@@ -11,8 +11,6 @@ function ConexionBD($Host='localhost', $User='root', $Password='root', $BaseDato
 
 // USUARIOS
 function DatosLogin_Hash($usuario, $clave, $vConexion) {
-    // Escapar datos básicos para prevenir inyecciones SQL
-    $usuario = mysqli_real_escape_string($vConexion, $usuario);
     
     // Busca el usuario por email O por nombre de usuario
     $SQL = "SELECT u.Id, u.Nombre, u.Apellido, u.Clave, u.Foto, u.Activo,
@@ -88,10 +86,10 @@ function Listar_Lideres($vConexion) {
 
 // PROYECTOS
 function Insertar_Proyecto($vConexion) {
-    $denominacion = mysqli_real_escape_string($vConexion, trim($_POST['Denominacion']));
+    $denominacion = trim($_POST['Denominacion']);
     $idEmpresa    = (int)$_POST['IdEmpresa'];
     $idLider      = (int)$_POST['IdLider'];
-    $obs          = mysqli_real_escape_string($vConexion, trim($_POST['Observaciones']));
+    $obs          = trim($_POST['Observaciones']);
     $prioridad    = isset($_POST['Prioridad']) ? 1 : 0;
     $idEstado     = 1;  // Siempre "Análisis Iniciado"
     $idUsuario    = $_SESSION['Usuario_Id'];

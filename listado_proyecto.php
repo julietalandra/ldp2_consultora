@@ -12,6 +12,7 @@ $MiConexion = ConexionBD();
 $ListadoProyectos  = Listar_Proyectos($MiConexion);
 $CantidadProyectos = count($ListadoProyectos);
 ?>
+
 <?php require_once 'includes/header.inc.php'; ?>
 
 <main class="content">
@@ -75,20 +76,20 @@ $CantidadProyectos = count($ListadoProyectos);
                                 ?>
                                 <tr>
                                     <td><?php echo $i + 1; ?></td>
-                                    <td><?php echo htmlspecialchars($ListadoProyectos[$i]['DENOMINACION']); ?></td>
+                                    <td><?php echo $ListadoProyectos[$i]['DENOMINACION']; ?></td>
                                     <td class="d-none d-md-table-cell"><?php echo $ListadoProyectos[$i]['FECHA_CARGA']; ?></td>
                                     <td class="d-none d-md-table-cell">
-                                        <img src="img/countries/<?php echo $bandera; ?>" width="36" height="36" class="rounded-circle me-2" alt="<?php echo htmlspecialchars($ListadoProyectos[$i]['PAIS']); ?>">
-                                        <?php echo htmlspecialchars($ListadoProyectos[$i]['EMPRESA']); ?>
+                                        <img src="img/countries/<?php echo $bandera; ?>" width="36" height="36" class="rounded-circle me-2" alt="<?php echo $ListadoProyectos[$i]['PAIS']; ?>">
+                                        <?php echo $ListadoProyectos[$i]['EMPRESA']; ?>
                                     </td>
                                     <td>
                                         <span class="badge bg-<?php echo $colorBadge; ?>">
-                                            <?php echo strtoupper(htmlspecialchars($ListadoProyectos[$i]['ESTADO'])); ?>
+                                            <?php echo strtoupper($ListadoProyectos[$i]['ESTADO']); ?>
                                         </span>
                                     </td>
                                     <td class="d-none d-md-table-cell">
-                                        <img src="img/avatars/<?php echo htmlspecialchars($ListadoProyectos[$i]['LIDER_FOTO']); ?>" width="36" height="36" class="rounded-circle me-2" alt="Líder">
-                                        <?php echo htmlspecialchars($ListadoProyectos[$i]['LIDER_NOMBRE'] . ' ' . $ListadoProyectos[$i]['LIDER_APELLIDO']); ?>
+                                        <img src="img/avatars/<?php echo $ListadoProyectos[$i]['LIDER_FOTO']; ?>" width="36" height="36" class="rounded-circle me-2" alt="Líder">
+                                        <?php echo $ListadoProyectos[$i]['LIDER_NOMBRE'] . ' ' . $ListadoProyectos[$i]['LIDER_APELLIDO']; ?>
                                     </td>
                                     <td>
                                         <!-- Editar: enlace dinámico -->

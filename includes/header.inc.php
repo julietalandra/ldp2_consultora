@@ -1,4 +1,5 @@
 <?php
+// Determina el nombre del archivo actual para marcar la opción activa en el menú
 $currentPage = basename($_SERVER['PHP_SELF']);
 ?>
 <!DOCTYPE html>
@@ -35,12 +36,14 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                         Proyectos
                     </li>
 
+                    <!-- Clase 'active' agregada dinámicamente si es la página de listado de proyectos -->
                     <li class="sidebar-item <?php echo ($currentPage == 'listado_proyecto.php') ? 'active' : ''; ?>">
                         <a class="sidebar-link" href="listado_proyecto.php">
                             <i class="align-middle me-2" data-feather="list"></i> <span class="align-middle">Listado</span>
                         </a>
                     </li>
 
+                    <!-- Clase 'active' agregada dinámicamente si es la página de carga de proyectos -->
                     <li class="sidebar-item <?php echo ($currentPage == 'carga_proyecto.php') ? 'active' : ''; ?>">
                         <a class="sidebar-link" href="carga_proyecto.php">
                             <i class="align-middle me-2" data-feather="file"></i><span class="align-middle">Cargar nuevo</span>
@@ -50,6 +53,7 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                     <li class="sidebar-header">
                         Personal
                     </li>
+                    <!-- Clase 'active' agregada dinámicamente si es la página de listado de usuarios -->
                     <li class="sidebar-item <?php echo ($currentPage == 'listado_usuarios.php') ? 'active' : ''; ?>">
                         <a class="sidebar-link" href="listado_usuarios.php">
                             <i class="align-middle me-2" data-feather="user"></i><span class="align-middle">Listado de usuarios</span>
@@ -127,14 +131,16 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                                 <i class="align-middle" data-feather="settings"></i>
                             </a>
 
+                            <!-- Avatar y Nombre completo del usuario logueado en la sesión -->
                             <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
-                                <img src="img/avatars/<?php echo htmlspecialchars($_SESSION['Usuario_Img']); ?>" class="avatar img-fluid rounded me-1" alt="<?php echo htmlspecialchars($_SESSION['Usuario_Nombre']); ?>" />
-                                <span class="text-dark"><?php echo htmlspecialchars($_SESSION['Usuario_Nombre'] . ' ' . $_SESSION['Usuario_Apellido']); ?></span>
+                                <img src="img/avatars/<?php echo $_SESSION['Usuario_Img']; ?>" class="avatar img-fluid rounded me-1" alt="<?php echo $_SESSION['Usuario_Nombre']; ?>" />
+                                <span class="text-dark"><?php echo $_SESSION['Usuario_Nombre'] . ' ' . $_SESSION['Usuario_Apellido']; ?></span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
+                                <!-- Nombre del nivel/rol del usuario logueado en la sesión -->
                                 <a class="dropdown-item" href="#">
                                     <i class="align-middle me-1" data-feather="user"></i>
-                                    Rol: <?php echo htmlspecialchars($_SESSION['Usuario_NombreNivel']); ?>
+                                    Rol: <?php echo $_SESSION['Usuario_NombreNivel']; ?>
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="index.php"><i class="align-middle me-1" data-feather="settings"></i> Panel</a>

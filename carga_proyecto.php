@@ -76,7 +76,7 @@ if (!empty($_POST['BotonRegistrar'])) {
                             <h5 class="card-title mb-0">Denominación <i class="align-middle me-2" data-feather="command"></i></h5>
                             <input type="text" class="form-control" name="Denominacion" 
                                    placeholder="Ingresa el nombre del Proyecto"
-                                   value="<?php echo isset($_POST['Denominacion']) ? htmlspecialchars($_POST['Denominacion']) : ''; ?>" required>
+                                   value="<?php echo isset($_POST['Denominacion']) ? $_POST['Denominacion'] : ''; ?>" required>
                         </div>
 
                         <div class="card-body">
@@ -86,7 +86,7 @@ if (!empty($_POST['BotonRegistrar'])) {
                                 <?php for ($i = 0; $i < $CantidadEmpresas; $i++): ?>
                                     <option value="<?php echo $ListadoEmpresas[$i]['ID']; ?>"
                                         <?php echo (isset($_POST['IdEmpresa']) && $_POST['IdEmpresa'] == $ListadoEmpresas[$i]['ID']) ? 'selected' : ''; ?>>
-                                        <?php echo htmlspecialchars($ListadoEmpresas[$i]['DENOMINACION']); ?>
+                                        <?php echo $ListadoEmpresas[$i]['DENOMINACION']; ?>
                                     </option>
                                 <?php endfor; ?>
                             </select>
@@ -99,7 +99,7 @@ if (!empty($_POST['BotonRegistrar'])) {
                                 <?php for ($i = 0; $i < $CantidadLideres; $i++): ?>
                                     <option value="<?php echo $ListadoLideres[$i]['ID']; ?>"
                                         <?php echo (isset($_POST['IdLider']) && $_POST['IdLider'] == $ListadoLideres[$i]['ID']) ? 'selected' : ''; ?>>
-                                        <?php echo htmlspecialchars($ListadoLideres[$i]['APELLIDO'] . ', ' . $ListadoLideres[$i]['NOMBRE']); ?>
+                                        <?php echo $ListadoLideres[$i]['APELLIDO'] . ', ' . $ListadoLideres[$i]['NOMBRE']; ?>
                                     </option>
                                 <?php endfor; ?>
                             </select>
@@ -108,7 +108,7 @@ if (!empty($_POST['BotonRegistrar'])) {
                         <div class="card-body">
                             <h5 class="card-title mb-0">Observaciones</h5>
                             <textarea class="form-control" name="Observaciones" rows="2" 
-                                      placeholder="Observaciones del tema..."><?php echo isset($_POST['Observaciones']) ? htmlspecialchars($_POST['Observaciones']) : ''; ?></textarea>
+                                      placeholder="Observaciones del tema..."><?php echo isset($_POST['Observaciones']) ? $_POST['Observaciones'] : ''; ?></textarea>
                         </div>
 
                         <div class="card-body">

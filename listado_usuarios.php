@@ -13,6 +13,7 @@ $MiConexion = ConexionBD();
 $ListadoUsuarios  = Listar_Usuarios($MiConexion);
 $CantidadUsuarios = count($ListadoUsuarios);
 ?>
+
 <?php require_once 'includes/header.inc.php'; ?>
 
 <main class="content">
@@ -45,13 +46,13 @@ $CantidadUsuarios = count($ListadoUsuarios);
                                 <tr>
                                     <td><?php echo $i + 1; ?></td>
                                     <td>
-                                        <img src="img/avatars/<?php echo htmlspecialchars($ListadoUsuarios[$i]['FOTO']); ?>" 
+                                        <img src="img/avatars/<?php echo $ListadoUsuarios[$i]['FOTO']; ?>" 
                                              width="36" height="36" class="rounded-circle me-2" 
-                                             alt="<?php echo htmlspecialchars($ListadoUsuarios[$i]['FOTO']); ?>">
-                                        <?php echo htmlspecialchars($ListadoUsuarios[$i]['APELLIDO'] . ' ' . $ListadoUsuarios[$i]['NOMBRE']); ?>
+                                             alt="<?php echo $ListadoUsuarios[$i]['FOTO']; ?>">
+                                        <?php echo $ListadoUsuarios[$i]['APELLIDO'] . ' ' . $ListadoUsuarios[$i]['NOMBRE']; ?>
                                     </td>
-                                    <td><?php echo htmlspecialchars($ListadoUsuarios[$i]['ROL']); ?></td>
-                                    <td><?php echo htmlspecialchars($ListadoUsuarios[$i]['USUARIO']); ?></td>
+                                    <td><?php echo $ListadoUsuarios[$i]['ROL']; ?></td>
+                                    <td><?php echo $ListadoUsuarios[$i]['USUARIO']; ?></td>
                                     <td>
                                         <!-- Enlaces con ID encriptados en base64 -->
                                         <a class="btn btn-primary btn-sm success" href="editar_usuario.php?ID_USUARIO=<?php echo $IdEnc; ?>">
