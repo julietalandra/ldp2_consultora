@@ -9,27 +9,6 @@ try {
     die("<p style='color:red;'>Error de conexión: " . $e->getMessage() . "</p>");
 }
 
-// Limpieza de usuarios de prueba previos para coincidir exactamente con la maqueta,
-// transfiriendo primero cualquier registro creado por 'jlandra' al administrador principal ('spalacios').
-$resJuli = mysqli_query($conn, "SELECT Id FROM usuarios WHERE Usuario = 'jlandra'");
-if ($resJuli && mysqli_num_rows($resJuli) > 0) {
-    $rowJuli = mysqli_fetch_array($resJuli);
-    $juliId = $rowJuli['Id'];
-    
-    $resAdmin = mysqli_query($conn, "SELECT Id FROM usuarios WHERE Usuario = 'spalacios' LIMIT 1");
-    $adminId = 1;
-    if ($resAdmin && mysqli_num_rows($resAdmin) > 0) {
-        $rowAdmin = mysqli_fetch_array($resAdmin);
-        $adminId = $rowAdmin['Id'];
-    }
-    
-    mysqli_query($conn, "SET FOREIGN_KEY_CHECKS = 0;");
-    mysqli_query($conn, "UPDATE proyectos SET IdUsuarioCarga = $adminId WHERE IdUsuarioCarga = $juliId");
-    mysqli_query($conn, "UPDATE empresas SET IdUsuarioCarga = $adminId WHERE IdUsuarioCarga = $juliId");
-    mysqli_query($conn, "DELETE FROM usuarios WHERE Id = $juliId");
-    mysqli_query($conn, "SET FOREIGN_KEY_CHECKS = 1;");
-}
-
 // 1. Crear tablas si no existen
 $queries = [];
 
@@ -107,6 +86,7 @@ $claveComun = password_hash('clave123', PASSWORD_DEFAULT);
 
 $usuariosSeed = [
     [
+        'Id' => 1,
         'Nombre' => 'Sue',
         'Apellido' => 'Palacios',
         'Email' => 'spalacios@consultora.com',
@@ -117,6 +97,7 @@ $usuariosSeed = [
         'Activo' => 1
     ],
     [
+        'Id' => 2,
         'Nombre' => 'Marcos',
         'Apellido' => 'Gutierrez',
         'Email' => 'mgutierrez@consultora.com',
@@ -127,6 +108,7 @@ $usuariosSeed = [
         'Activo' => 1
     ],
     [
+        'Id' => 3,
         'Nombre' => 'William',
         'Apellido' => 'Jhonson',
         'Email' => 'wjhonson@consultora.com',
@@ -137,6 +119,7 @@ $usuariosSeed = [
         'Activo' => 1
     ],
     [
+        'Id' => 4,
         'Nombre' => 'Anna',
         'Apellido' => 'Rodriguez',
         'Email' => 'arodriguez@consultora.com',
@@ -147,6 +130,7 @@ $usuariosSeed = [
         'Activo' => 1
     ],
     [
+        'Id' => 5,
         'Nombre' => 'Carla',
         'Apellido' => 'Sanabria',
         'Email' => 'csanabria@consultora.com',
@@ -157,6 +141,7 @@ $usuariosSeed = [
         'Activo' => 1
     ],
     [
+        'Id' => 6,
         'Nombre' => 'Marcos',
         'Apellido' => 'Ferrero',
         'Email' => 'mferrero@consultora.com',
@@ -169,38 +154,21 @@ $usuariosSeed = [
 ];
 
 foreach ($usuariosSeed as $u) {
-    $usuarioEscaped = mysqli_real_escape_string($conn, $u['Usuario']);
-    $emailEscaped = mysqli_real_escape_string($conn, $u['Email']);
-    $checkUser = mysqli_query($conn, "SELECT Id FROM usuarios WHERE Usuario = '$usuarioEscaped' OR Email = '$emailEscaped'");
-    
+    $checkUser = mysqli_query($conn, "SELECT Id FROM usuarios WHERE Id = {$u['Id']}");
     if (mysqli_num_rows($checkUser) == 0) {
-        $sql = "INSERT INTO usuarios (Nombre, Apellido, Email, Usuario, Clave, IdRol, Foto, Activo)
-                VALUES ('{$u['Nombre']}', '{$u['Apellido']}', '{$u['Email']}', '{$u['Usuario']}', '{$u['Clave']}', {$u['IdRol']}, '{$u['Foto']}', {$u['Activo']})";
+        $sql = "INSERT INTO usuarios (Id, Nombre, Apellido, Email, Usuario, Clave, IdRol, Foto, Activo)
+                VALUES ({$u['Id']}, '{$u['Nombre']}', '{$u['Apellido']}', '{$u['Email']}', '{$u['Usuario']}', '{$u['Clave']}', {$u['IdRol']}, '{$u['Foto']}', {$u['Activo']})";
         if (mysqli_query($conn, $sql)) {
-            echo "<p style='color:green;'>✓ Usuario <strong>{$u['Usuario']}</strong> insertado correctamente. Clave: <code>clave123</code></p>";
+            echo "<p style='color:green;'>✓ Usuario <strong>{$u['Usuario']}</strong> insertado correctamente.</p>";
         } else {
             echo "<p style='color:red;'>✗ Error al insertar usuario {$u['Usuario']}: " . mysqli_error($conn) . "</p>";
         }
     } else {
-        // Si el usuario ya existe, actualizamos su contraseña y datos semilla para poder loguearnos
-        $sql = "UPDATE usuarios 
-                SET Nombre = '{$u['Nombre']}', 
-                    Apellido = '{$u['Apellido']}', 
-                    Clave = '{$u['Clave']}', 
-                    IdRol = {$u['IdRol']}, 
-                    Foto = '{$u['Foto']}', 
-                    Activo = {$u['Activo']}
-                WHERE Usuario = '$usuarioEscaped' OR Email = '$emailEscaped'";
-        if (mysqli_query($conn, $sql)) {
-            echo "<p style='color:green;'>✓ Usuario <strong>{$u['Usuario']}</strong> actualizado (Clave configurada a <code>clave123</code>).</p>";
-        } else {
-            echo "<p style='color:red;'>✗ Error al actualizar usuario {$u['Usuario']}: " . mysqli_error($conn) . "</p>";
-        }
+        echo "<p style='color:green;'>✓ El usuario <strong>{$u['Usuario']}</strong> ya existe.</p>";
     }
 }
 
 // 4. Sembrar Empresas
-// AVEC (Uruguay=2), Mercado Libre Brasil (Brasil=4), Tersuave (Argentina=1), La Serena (Chile=3)
 $empresasSeed = [
     ['Id' => 1, 'Denominacion' => 'Pinturerias Tersuave', 'IdPais' => 1, 'Observaciones' => 'Cliente histórico de pintura', 'FechaCarga' => '2026-05-15', 'IdUsuarioCarga' => 1],
     ['Id' => 2, 'Denominacion' => 'AVEC Automotores', 'IdPais' => 2, 'Observaciones' => 'Concesionario de vehículos en Uruguay', 'FechaCarga' => '2026-05-01', 'IdUsuarioCarga' => 1],
@@ -211,13 +179,8 @@ $empresasSeed = [
 foreach ($empresasSeed as $emp) {
     $checkEmp = mysqli_query($conn, "SELECT Id FROM empresas WHERE Id = {$emp['Id']}");
     if (mysqli_num_rows($checkEmp) == 0) {
-        // Obtenemos un usuario administrador existente
-        $adminQuery = mysqli_query($conn, "SELECT Id FROM usuarios WHERE IdRol = 1 LIMIT 1");
-        $admin = mysqli_fetch_array($adminQuery);
-        $userId = $admin ? $admin['Id'] : 1;
-
         $sql = "INSERT INTO empresas (Id, Denominacion, IdPais, Observaciones, FechaCarga, IdUsuarioCarga)
-                VALUES ({$emp['Id']}, '{$emp['Denominacion']}', {$emp['IdPais']}, '{$emp['Observaciones']}', '{$emp['FechaCarga']}', $userId)";
+                VALUES ({$emp['Id']}, '{$emp['Denominacion']}', {$emp['IdPais']}, '{$emp['Observaciones']}', '{$emp['FechaCarga']}', {$emp['IdUsuarioCarga']})";
         if (mysqli_query($conn, $sql)) {
             echo "<p style='color:green;'>✓ Empresa <strong>{$emp['Denominacion']}</strong> sembrada correctamente.</p>";
         } else {
@@ -228,94 +191,78 @@ foreach ($empresasSeed as $emp) {
     }
 }
 
-// 5. Sembrar Proyectos Iniciales (para probar el listado de proyectos)
-// 1 = Analisis Iniciado, 2 = En Desarrollo, 3 = Terminado, 4 = Cancelado
+// 5. Sembrar Proyectos Iniciales
 $proyectosSeed = [
     [
+        'Id' => 1,
         'Denominacion' => 'ECommerce Renovación',
         'IdEmpresa' => 2, // AVEC
-        'IdLider' => 4, // Rodriguez Anna (will be fetched dynamically below)
+        'IdLider' => 4, // Rodriguez Anna
         'Observaciones' => 'Reestructuración del portal de ventas',
         'Prioridad' => 1,
         'IdEstado' => 3, // Terminado
-        'FechaCarga' => '2026-05-01'
+        'FechaCarga' => '2026-05-01',
+        'IdUsuarioCarga' => 1
     ],
     [
+        'Id' => 2,
         'Denominacion' => 'Generación APIs + Documentación',
         'IdEmpresa' => 4, // Mercado Libre Brasil
         'IdLider' => 2, // Gutierrez Marcos
         'Observaciones' => 'Desarrollo de APIs e integración',
         'Prioridad' => 0,
         'IdEstado' => 2, // En Desarrollo
-        'FechaCarga' => '2026-05-10'
+        'FechaCarga' => '2026-05-10',
+        'IdUsuarioCarga' => 1
     ],
     [
+        'Id' => 3,
         'Denominacion' => 'Adecuaciones en estructuras de Productos',
         'IdEmpresa' => 1, // Tersuave
-        'IdLider' => 3, // Jhonson William
+        'IdLider' => 3, // William Jhonson
         'Observaciones' => 'Cambios en bases de datos de productos',
         'Prioridad' => 1,
         'IdEstado' => 1, // Análisis Iniciado
-        'FechaCarga' => '2026-05-15'
+        'FechaCarga' => '2026-05-15',
+        'IdUsuarioCarga' => 1
     ],
     [
+        'Id' => 4,
         'Denominacion' => 'Cambios en seguridad al ingreso',
         'IdEmpresa' => 4, // Mercado Libre Brasil
         'IdLider' => 2, // Gutierrez Marcos
         'Observaciones' => 'Ajuste en sistema de login y tokens',
         'Prioridad' => 0,
         'IdEstado' => 1, // Análisis Iniciado
-        'FechaCarga' => '2026-05-18'
+        'FechaCarga' => '2026-05-18',
+        'IdUsuarioCarga' => 1
     ],
     [
+        'Id' => 5,
         'Denominacion' => 'Gestión de Facturación Web',
         'IdEmpresa' => 3, // La Serena
-        'IdLider' => 3, // Jhonson William
+        'IdLider' => 3, // William Jhonson
         'Observaciones' => 'Integración con pasarela fiscal de Chile',
         'Prioridad' => 1,
         'IdEstado' => 4, // Cancelado
-        'FechaCarga' => '2026-05-25'
+        'FechaCarga' => '2026-05-25',
+        'IdUsuarioCarga' => 1
     ]
 ];
 
-// Obtener IDs correctos de los líderes
-$lideresMap = [];
-$res = mysqli_query($conn, "SELECT Id, Usuario FROM usuarios WHERE IdRol = 2");
-while ($row = mysqli_fetch_array($res)) {
-    $lideresMap[$row['Usuario']] = $row['Id'];
-}
-
-// Obtener ID del admin para el campo de carga
-$adminQuery = mysqli_query($conn, "SELECT Id FROM usuarios WHERE IdRol = 1 LIMIT 1");
-$admin = mysqli_fetch_array($adminQuery);
-$adminId = $admin ? $admin['Id'] : 1;
-
-$checkProj = mysqli_query($conn, "SELECT COUNT(*) as total FROM proyectos");
-$projCount = mysqli_fetch_array($checkProj)['total'];
-
-if ($projCount == 0) {
-    foreach ($proyectosSeed as $p) {
-        // Mapear líderes por usuario
-        $liderId = 1;
-        if ($p['IdLider'] == 2) {
-            $liderId = $lideresMap['mgutierrez'] ?? 2;
-        } elseif ($p['IdLider'] == 3) {
-            $liderId = $lideresMap['wjhonson'] ?? 3;
-        } elseif ($p['IdLider'] == 4) {
-            $liderId = $lideresMap['arodriguez'] ?? 4;
-        }
-
-        $sql = "INSERT INTO proyectos (Denominacion, IdEmpresa, IdLider, Observaciones, Prioridad, IdEstado, FechaCarga, IdUsuarioCarga)
-                VALUES ('{$p['Denominacion']}', {$p['IdEmpresa']}, $liderId, '{$p['Observaciones']}', {$p['Prioridad']}, {$p['IdEstado']}, '{$p['FechaCarga']}', $adminId)";
-        
+foreach ($proyectosSeed as $p) {
+    $checkProj = mysqli_query($conn, "SELECT Id FROM proyectos WHERE Id = {$p['Id']}");
+    if (mysqli_num_rows($checkProj) == 0) {
+        $sql = "INSERT INTO proyectos (Id, Denominacion, IdEmpresa, IdLider, Observaciones, Prioridad, IdEstado, FechaCarga, IdUsuarioCarga)
+                VALUES ({$p['Id']}, '{$p['Denominacion']}', {$p['IdEmpresa']}, {$p['IdLider']}, '{$p['Observaciones']}', {$p['Prioridad']}, {$p['IdEstado']}, '{$p['FechaCarga']}', {$p['IdUsuarioCarga']})";
         if (mysqli_query($conn, $sql)) {
             echo "<p style='color:green;'>✓ Proyecto <strong>{$p['Denominacion']}</strong> creado.</p>";
         } else {
             echo "<p style='color:red;'>✗ Error al insertar proyecto {$p['Denominacion']}: " . mysqli_error($conn) . "</p>";
         }
+    } else {
+        echo "<p style='color:green;'>✓ El proyecto <strong>{$p['Denominacion']}</strong> ya existe.</p>";
     }
-} else {
-    echo "<p style='color:green;'>✓ La tabla proyectos ya tiene registros cargados.</p>";
 }
 
 echo "<h3>¡Proceso de sembrado finalizado correctamente!</h3>";
