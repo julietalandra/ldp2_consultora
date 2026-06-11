@@ -1,6 +1,5 @@
 <?php
 session_start();
-// Control de sesión
 if (empty($_SESSION['Usuario_Nombre'])) {
     header('Location: cerrarsesion.php');
     exit;

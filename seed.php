@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
   Foto VARCHAR(100),
   Activo TINYINT DEFAULT 1,
   FOREIGN KEY (IdRol) REFERENCES roles(Id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) 
 ";
 
 // Tabla empresas
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS empresas (
   FechaCarga DATE,
   IdUsuarioCarga INT,
   FOREIGN KEY (IdPais) REFERENCES paises(Id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) 
 ";
 
 // Tabla proyectos
@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS proyectos (
   FOREIGN KEY (IdLider) REFERENCES usuarios(Id),
   FOREIGN KEY (IdEstado) REFERENCES estados(Id),
   FOREIGN KEY (IdUsuarioCarga) REFERENCES usuarios(Id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) 
 ";
 
 foreach ($queries as $tabla => $sql) {
@@ -68,7 +68,7 @@ foreach ($queries as $tabla => $sql) {
     }
 }
 
-// 2. Insertar Brasil en paises si no existe
+// 2. Insertar Brasil en paises
 $checkPais = mysqli_query($conn, "SELECT Id FROM paises WHERE Denominacion = 'Brasil'");
 if (mysqli_num_rows($checkPais) == 0) {
     if (mysqli_query($conn, "INSERT INTO paises (Id, Denominacion) VALUES (4, 'Brasil')")) {
@@ -169,6 +169,7 @@ foreach ($usuariosSeed as $u) {
 }
 
 // 4. Sembrar Empresas
+// AVEC (Uruguay=2), Mercado Libre Brasil (Brasil=4), Tersuave (Argentina=1), La Serena (Chile=3)
 $empresasSeed = [
     ['Id' => 1, 'Denominacion' => 'Pinturerias Tersuave', 'IdPais' => 1, 'Observaciones' => 'Cliente histórico de pintura', 'FechaCarga' => '2026-05-15', 'IdUsuarioCarga' => 1],
     ['Id' => 2, 'Denominacion' => 'AVEC Automotores', 'IdPais' => 2, 'Observaciones' => 'Concesionario de vehículos en Uruguay', 'FechaCarga' => '2026-05-01', 'IdUsuarioCarga' => 1],

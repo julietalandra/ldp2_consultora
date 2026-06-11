@@ -1,6 +1,6 @@
 <?php
 
-// ==================== CONEXIÓN ====================
+// CONEXIÓN 
 function ConexionBD($Host='localhost', $User='root', $Password='root', $BaseDatos='consultora') {
     $link = mysqli_connect($Host, $User, $Password, $BaseDatos);
     if (!$link) {
@@ -9,7 +9,7 @@ function ConexionBD($Host='localhost', $User='root', $Password='root', $BaseDato
     return $link;
 }
 
-// ==================== USUARIOS ====================
+// USUARIOS
 function DatosLogin_Hash($usuario, $clave, $vConexion) {
     // Escapar datos básicos para prevenir inyecciones SQL
     $usuario = mysqli_real_escape_string($vConexion, $usuario);
@@ -24,7 +24,7 @@ function DatosLogin_Hash($usuario, $clave, $vConexion) {
     $rs = mysqli_query($vConexion, $SQL);
     if ($rs && mysqli_num_rows($rs) > 0) {
         $dato = mysqli_fetch_array($rs);
-        // Verifica la contraseña con password_verify
+        // Verifica la contraseña
         if (password_verify($clave, $dato['Clave'])) {
             return $dato;
         }
@@ -54,7 +54,7 @@ function Listar_Usuarios($vConexion) {
     return $Listado;
 }
 
-// ==================== EMPRESAS ====================
+// EMPRESAS
 function Listar_Empresas($vConexion) {
     $Listado = array();
     $SQL = "SELECT Id, Denominacion FROM empresas ORDER BY Denominacion";
@@ -68,7 +68,7 @@ function Listar_Empresas($vConexion) {
     return $Listado;
 }
 
-// ==================== LÍDERES ====================
+// LÍDERES
 function Listar_Lideres($vConexion) {
     // Solo trae usuarios con rol Lider (IdRol = 2)
     $Listado = array();
@@ -86,9 +86,8 @@ function Listar_Lideres($vConexion) {
     return $Listado;
 }
 
-// ==================== PROYECTOS ====================
+// PROYECTOS
 function Insertar_Proyecto($vConexion) {
-    // Limpieza de datos en $_POST hecha antes en el script, pero se vuelve a aplicar por seguridad
     $denominacion = mysqli_real_escape_string($vConexion, trim($_POST['Denominacion']));
     $idEmpresa    = (int)$_POST['IdEmpresa'];
     $idLider      = (int)$_POST['IdLider'];
@@ -139,7 +138,7 @@ function Listar_Proyectos($vConexion) {
     return $Listado;
 }
 
-// ==================== VALIDACIONES ====================
+// VALIDACIONES
 function Validar_Proyecto() {
     $_SESSION['Mensaje'] = '';
 
@@ -153,4 +152,5 @@ function Validar_Proyecto() {
         $_SESSION['Mensaje'] .= 'Seleccioná un líder.<br/>';
     }
 }
+
 ?>

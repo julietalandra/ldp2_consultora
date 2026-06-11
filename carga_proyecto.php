@@ -19,7 +19,7 @@ $Mensaje = '';
 $Estilo  = '';
 
 if (!empty($_POST['BotonRegistrar'])) {
-    // Limpieza de datos en $_POST según patrón de la profesora
+    // Limpieza de datos en $_POST
     foreach ($_POST as $clave => $valor) {
         $_POST[$clave] = trim(strip_tags($valor));
     }

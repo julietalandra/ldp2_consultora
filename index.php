@@ -1,6 +1,5 @@
 <?php
 session_start();
-// Control de sesión: redirige si no existe la variable de sesión
 if (empty($_SESSION['Usuario_Nombre'])) {
     header('Location: cerrarsesion.php');
     exit;
