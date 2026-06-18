@@ -6,6 +6,11 @@ if (empty($_SESSION['Usuario_Nombre'])) {
     exit;
 }
 
+if ($_SESSION['Usuario_Nivel'] != 1) {
+    header("Location: index.php");
+    exit();
+}
+
 require_once 'funciones/library.php';
 $MiConexion = ConexionBD();
 

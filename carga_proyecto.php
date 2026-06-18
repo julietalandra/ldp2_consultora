@@ -55,11 +55,16 @@ if (!empty($_POST['BotonRegistrar'])) {
             <div class="col-12 col-lg-6">
                 <div class="card">
                     <div class="card-header">
-                        <?php if (!empty($Mensaje)): ?>
+                        <?php 
+                        // 2. MOSTRAR MENSAJES DE ÉXITO O ERROR (Si se intentó registrar y hay un mensaje cargado)
+                        if (!empty($Mensaje)): 
+                        ?>
                             <h4 class="text-<?php echo $Estilo; ?>">
                                 <?php if ($Estilo == 'success'): ?>
+                                    <!-- Icono de éxito (Check) -->
                                     <i class="align-middle" data-feather="check-square"></i>
                                 <?php else: ?>
+                                    <!-- Icono de error (Alerta) -->
                                     <i class="align-middle me-2" data-feather="alert-circle"></i>
                                 <?php endif; ?>
                                 <?php echo $Mensaje; ?>
@@ -74,6 +79,7 @@ if (!empty($_POST['BotonRegistrar'])) {
                     <form action="" method="POST">
                         <div class="card-body">
                             <h5 class="card-title mb-0">Denominación <i class="align-middle me-2" data-feather="command"></i></h5>
+                            <!-- 3. RETENCIÓN DE DATOS (Mantiene el texto escrito en caso de error en el envío del formulario) -->
                             <input type="text" class="form-control" name="Denominacion" 
                                    placeholder="Ingresa el nombre del Proyecto"
                                    value="<?php echo isset($_POST['Denominacion']) ? $_POST['Denominacion'] : ''; ?>" required>
@@ -83,9 +89,15 @@ if (!empty($_POST['BotonRegistrar'])) {
                             <h5 class="card-title mb-0">Empresa <i class="align-middle me-2" data-feather="command"></i></h5>
                             <select class="form-select mb-3" name="IdEmpresa" required>
                                 <option value="">Para quien trabajaremos...</option>
-                                <?php for ($i = 0; $i < $CantidadEmpresas; $i++): ?>
+                                <?php 
+                                // 4. BUCLE PARA LISTAR EMPRESAS Y AUTO-SELECCIONAR LA ELEGIDA
+                                for ($i = 0; $i < $CantidadEmpresas; $i++): 
+                                ?>
                                     <option value="<?php echo $ListadoEmpresas[$i]['ID']; ?>"
-                                        <?php echo (isset($_POST['IdEmpresa']) && $_POST['IdEmpresa'] == $ListadoEmpresas[$i]['ID']) ? 'selected' : ''; ?>>
+                                        <?php 
+                                        // Si la empresa actual coincide con la que el usuario ya había seleccionado antes de enviar, la marca como "selected"
+                                        echo (isset($_POST['IdEmpresa']) && $_POST['IdEmpresa'] == $ListadoEmpresas[$i]['ID']) ? 'selected' : ''; 
+                                        ?>>
                                         <?php echo $ListadoEmpresas[$i]['DENOMINACION']; ?>
                                     </option>
                                 <?php endfor; ?>
@@ -96,9 +108,15 @@ if (!empty($_POST['BotonRegistrar'])) {
                             <h5 class="card-title mb-0">Líder <i class="align-middle me-2" data-feather="command"></i></h5>
                             <select class="form-select mb-3" name="IdLider" required>
                                 <option value="">Selecciona una opción</option>
-                                <?php for ($i = 0; $i < $CantidadLideres; $i++): ?>
+                                <?php 
+                                // 5. BUCLE PARA LISTAR LÍDERES Y AUTO-SELECCIONAR EL ELEGIDO
+                                for ($i = 0; $i < $CantidadLideres; $i++): 
+                                ?>
                                     <option value="<?php echo $ListadoLideres[$i]['ID']; ?>"
-                                        <?php echo (isset($_POST['IdLider']) && $_POST['IdLider'] == $ListadoLideres[$i]['ID']) ? 'selected' : ''; ?>>
+                                        <?php 
+                                        // Si el líder coincide con el seleccionado previamente, lo marca como "selected"
+                                        echo (isset($_POST['IdLider']) && $_POST['IdLider'] == $ListadoLideres[$i]['ID']) ? 'selected' : ''; 
+                                        ?>>
                                         <?php echo $ListadoLideres[$i]['APELLIDO'] . ', ' . $ListadoLideres[$i]['NOMBRE']; ?>
                                     </option>
                                 <?php endfor; ?>
@@ -107,12 +125,14 @@ if (!empty($_POST['BotonRegistrar'])) {
 
                         <div class="card-body">
                             <h5 class="card-title mb-0">Observaciones</h5>
+                            <!-- 6. RETENCIÓN DE TEXTO (Mantiene las observaciones cargadas en el textarea) -->
                             <textarea class="form-control" name="Observaciones" rows="2" 
                                       placeholder="Observaciones del tema..."><?php echo isset($_POST['Observaciones']) ? $_POST['Observaciones'] : ''; ?></textarea>
                         </div>
 
                         <div class="card-body">
                             <label class="form-check">
+                                <!-- 7. RETENCIÓN DEL CHECKBOX (Mantiene tildada la prioridad si fue seleccionada antes) -->
                                 <input class="form-check-input" type="checkbox" name="Prioridad" value="1"
                                     <?php echo isset($_POST['Prioridad']) ? 'checked' : ''; ?>>
                                 <span class="form-check-label">

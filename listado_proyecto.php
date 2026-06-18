@@ -97,8 +97,8 @@ $CantidadProyectos = count($ListadoProyectos);
                                             <span data-feather="edit"></span> Editar
                                         </a>
 
-                                        <!-- Cancelar: Visible para Admin (Nivel 1) y Líder (Nivel 2) -->
-                                        <?php if (in_array($_SESSION['Usuario_Nivel'], [1, 2])): ?>
+                                        <!-- Cancelar: Visible para Admin (Nivel 1) -->
+                                        <?php if ($_SESSION['Usuario_Nivel'] == 1): ?>
                                             <a class="btn btn-warning btn-sm" href="cancelar_proyecto.php?ID_PROYECTO=<?php echo $idEncriptado; ?>&ESTADO=4">
                                                 <span data-feather="alert-triangle"></span> Cancelar
                                             </a>

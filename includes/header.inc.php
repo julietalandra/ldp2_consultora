@@ -49,7 +49,9 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                             <i class="align-middle me-2" data-feather="file"></i><span class="align-middle">Cargar nuevo</span>
                         </a>
                     </li>
-					
+
+					<?php if ($_SESSION['Usuario_Nivel'] == 1){ ?>
+
                     <li class="sidebar-header">
                         Personal
                     </li>
@@ -59,6 +61,8 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                             <i class="align-middle me-2" data-feather="user"></i><span class="align-middle">Listado de usuarios</span>
                         </a>
                     </li>
+
+                    <?php } ?>
 
                     <li class="sidebar-header">
                         Empresas
@@ -73,12 +77,15 @@ $currentPage = basename($_SERVER['PHP_SELF']);
                             <i class="align-middle me-2" data-feather="file"></i><span class="align-middle">Cargar nueva</span>
                         </a>
                     </li>
-
+                    
+                    <?php if ($_SESSION['Usuario_Nivel'] == 1){ ?>
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="listado_paises.html">
                             <i class="align-middle me-2" data-feather="map-pin"></i><span class="align-middle">Listado de países</span>
                         </a>
                     </li>
+                    <?php } ?>
+                    
                 </ul>
             </div>
         </nav>
